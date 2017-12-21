@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Collections;
+using System.Diagnostics;
 
 namespace ImageQuantization
 {
@@ -37,6 +38,10 @@ namespace ImageQuantization
         {
             int  tap = Int16.Parse(txtGaussSigma.Text);
             string seed = textBox1.Text;
+            // start stopwatch
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+
 
             ImageMatrix = ImageOperations.encrypt(ImageMatrix, tap, seed);
             ImageOperations.DisplayImage(ImageMatrix, pictureBox2);
@@ -55,6 +60,19 @@ namespace ImageQuantization
             huffmanRed.writeHuffman("Red");
             huffmanGreen.writeHuffman("Green");
             huffmanBlue.writeHuffman("Blue");
+
+            // stop stopwatch
+            stopWatch.Stop();
+            // Get the elapsed time as a TimeSpan value.
+            TimeSpan ts = stopWatch.Elapsed;
+
+            // Format and display the TimeSpan value.
+            string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                ts.Hours, ts.Minutes, ts.Seconds,
+                ts.Milliseconds / 10);
+
+            compressTime.Text = "RunTime " + elapsedTime;
+
         }
     }
 }

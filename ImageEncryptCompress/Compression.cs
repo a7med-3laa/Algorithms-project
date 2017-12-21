@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Collections;
+using System.Diagnostics;
+using System.Threading;
 
 namespace ImageQuantization
 {
@@ -12,6 +14,10 @@ namespace ImageQuantization
         static string fileName = "compressEncode.bin";
         public static void compress(RGBPixel[,] ImageMatrix, Huffman huffmanRed, Huffman huffmanGreen, Huffman huffmanBlue)
         {
+            
+           
+           
+
             List<bool> tempRed = new List<bool>();
             List<bool> tempBlue = new List<bool>();
             List<bool> tempGreen = new List<bool>();
@@ -51,7 +57,8 @@ namespace ImageQuantization
             BitArray d = new BitArray(tempRed.ToArray());
             d.CopyTo(bytes, 0);
             File.WriteAllBytes(fileName, bytes);
-            
+
+
         }
     }
 }
