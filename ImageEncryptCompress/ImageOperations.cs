@@ -218,15 +218,15 @@ namespace ImageQuantization
             {
                 if (redArr[i] != 0)
                 {
-                    redQ.Enqueue(new Node(i, redArr[i]));
+                    redQ.Enqueue(new Node((byte) i, redArr[i]));
                 }
                 if (greenArr[i] != 0)
                 {
-                    greenQ.Enqueue(new Node(i, greenArr[i]));
+                    greenQ.Enqueue(new Node((byte) i, greenArr[i]));
                 }
                 if (blueArr[i] != 0)
                 {
-                    blueQ.Enqueue(new Node(i, blueArr[i]));
+                    blueQ.Enqueue(new Node((byte) i, blueArr[i]));
                 }
             }
         }

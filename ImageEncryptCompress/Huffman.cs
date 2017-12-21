@@ -19,12 +19,14 @@ namespace ImageQuantization
         
 
         public List<Node> Colors = new List<Node>();
+        public Dictionary<byte, KeyValuePair<int, string>> ColorsMap = new Dictionary<byte, KeyValuePair<int, string>>();
         public void getBinary(Node parent,string bin)
         {
             if (!parent.hasChildreen())
             {
                 parent.Binary = bin;
                 Colors.Add(parent);
+                ColorsMap.Add(parent.color, new KeyValuePair<int, string>(parent.frequnecy, parent.Binary));
             }
             if(parent.left != null)
                 getBinary(parent.left, bin + "0");
@@ -56,7 +58,7 @@ namespace ImageQuantization
                 tmp.left = left;
                 tmp.right = right;
                 tmp.frequnecy = left.frequnecy + right.frequnecy;
-                tmp.color = tmp.frequnecy;
+                tmp.color = (byte) tmp.frequnecy;
                 nodes.Enqueue(tmp);
                 tmp = new Node();
             }
@@ -93,6 +95,14 @@ namespace ImageQuantization
             }
             s += Environment.NewLine;
             File.AppendAllText(filename, s);
+        }
+
+        public long getCompressedSize()
+        {
+            long ans = 0;
+            for(int i = 0; i < Colors.Count; i++)
+                ans += ColorsMap[Colors[i].color].Value.Length * ColorsMap[Colors[i].color].Key;            
+            return ans;
         }
     }
 }

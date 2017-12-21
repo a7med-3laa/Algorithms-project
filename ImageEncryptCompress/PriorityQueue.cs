@@ -8,17 +8,18 @@ namespace ImageQuantization
     public class Node
     {
         public Node left, right;
-        public int frequnecy, color;
+        public int frequnecy;
+        public byte color;
         public string Binary;
         public Node()
         {
             left = null;
             right = null;
             frequnecy = 0;
-            color = -1;
+            color = 0;
         }
 
-        public Node(int C,int F)
+        public Node(byte C,int F)
         {
             left = null;
             right = null;

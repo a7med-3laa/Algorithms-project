@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using System.Collections;
 
 namespace ImageQuantization
 {
@@ -46,7 +47,11 @@ namespace ImageQuantization
             Huffman huffmanRed = new Huffman(redQ);
             Huffman huffmanGreen = new Huffman(greenQ);
             Huffman huffmanBlue = new Huffman(blueQ);
+            double originalSize = ImageMatrix.GetLength(0) * ImageMatrix.GetLength(1) * 8 * 3;
+            double compressedSize = huffmanRed.getCompressedSize() + huffmanGreen.getCompressedSize() + huffmanBlue.getCompressedSize();
+            double compressionRatio = (compressedSize / originalSize) * 100;
             Huffman.clearFile();
+            Compression.compress(ImageMatrix, huffmanRed, huffmanGreen, huffmanBlue);
             huffmanRed.writeHuffman("Red");
             huffmanGreen.writeHuffman("Green");
             huffmanBlue.writeHuffman("Blue");
