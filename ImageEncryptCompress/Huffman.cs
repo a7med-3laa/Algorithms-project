@@ -70,31 +70,22 @@ namespace ImageQuantization
 
         static public void clearFile()
         {
-            string filename = "huffman.txt";
-            string s = " Color  -  Frequency  -  Binary  -  Total Bits  " + Environment.NewLine;
-            File.WriteAllText(filename, s);
+            //    string filename = "huffman.txt";
+            //    File.WriteAllText(filename, "");
         }
-        public void writeHuffman(string color)
+        public String writeHuffman()
         {
-            string filename = "huffman.txt";
-            if (!File.Exists(filename))
-                File.Create(filename);
-            string s = "--------- " + color + " ---------" + Environment.NewLine;
+            string s = "";
             for (int i = 0; i < Colors.Count; i++)
             {
                 s += Colors[i].color;
-                s += "  -  ";
+                s += ":";
              
                 s += Colors[i].frequnecy;
-                s += "  -  ";
+                s += ":";
                 s += Colors[i].Binary;
-                s += "  -  ";
-                long total = Colors[i].frequnecy * Colors[i].Binary.Length;
-                s += total.ToString();
-                s += Environment.NewLine;
             }
-            s += Environment.NewLine;
-            File.AppendAllText(filename, s);
+            return s;
         }
 
         public long getCompressedSize()

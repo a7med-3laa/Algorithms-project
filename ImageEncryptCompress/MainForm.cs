@@ -36,7 +36,7 @@ namespace ImageQuantization
         private void btnGaussSmooth_Click(object sender, EventArgs e)
         {
             int  tap = Int16.Parse(txtGaussSigma.Text);
-            string seed = textBox1.Text;
+string seed = textBox1.Text;
 
             ImageMatrix = ImageOperations.encrypt(ImageMatrix, tap, seed);
             ImageOperations.DisplayImage(ImageMatrix, pictureBox2);
@@ -51,10 +51,14 @@ namespace ImageQuantization
             double compressedSize = huffmanRed.getCompressedSize() + huffmanGreen.getCompressedSize() + huffmanBlue.getCompressedSize();
             double compressionRatio = (compressedSize / originalSize) * 100;
             Huffman.clearFile();
-            Compression.compress(ImageMatrix, huffmanRed, huffmanGreen, huffmanBlue);
-            huffmanRed.writeHuffman("Red");
-            huffmanGreen.writeHuffman("Green");
-            huffmanBlue.writeHuffman("Blue");
+            Compression.compress(ImageMatrix, huffmanRed, huffmanGreen, huffmanBlue,seed, short.Parse(txtGaussSigma.Text));
+            
+
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
