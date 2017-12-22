@@ -8,7 +8,7 @@ namespace ImageQuantization
 {
     class Huffman
     {
-        Node start;
+        public Node start;
         PriorityQueue nodes;
         public Huffman(PriorityQueue n)
         {
@@ -86,13 +86,13 @@ namespace ImageQuantization
         }
         public String writeHuffman()
         {
-            string s = "";
+            string s = "0";
             for (int i = 0; i < Colors.Count; i++)
             {
                 s += Colors[i].color;
-                s += ":";
+                s += ",";
                 s += Colors[i].frequnecy;
-                s += ":";
+                s += ",";
 
                  }
             return s;

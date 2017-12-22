@@ -42,9 +42,19 @@ namespace ImageQuantization
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
 
-
+            TimeSpan ts;
+            string elapsedTime;
+            
             ImageMatrix = ImageOperations.encrypt(ImageMatrix, tap, seed);
             ImageOperations.DisplayImage(ImageMatrix, pictureBox2);
+             ts = stopWatch.Elapsed;
+            // Format and display the TimeSpan value.
+             elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                ts.Hours, ts.Minutes, ts.Seconds,
+                ts.Milliseconds / 10);
+
+            label10.Text = elapsedTime;
+
             PriorityQueue redQ = new PriorityQueue();
             PriorityQueue greenQ = new PriorityQueue();
             PriorityQueue blueQ = new PriorityQueue();
@@ -56,20 +66,32 @@ namespace ImageQuantization
             double compressedSize = huffmanRed.getCompressedSize() + huffmanGreen.getCompressedSize() + huffmanBlue.getCompressedSize();
             double compressionRatio = (compressedSize / originalSize) * 100;
             Huffman.clearFile();
-            Compression.compress(ImageMatrix, huffmanRed, huffmanGreen, huffmanBlue, seed, short.Parse(txtGaussSigma.Text));
-
-            // stop stopwatch
-            stopWatch.Stop();
-            // Get the elapsed time as a TimeSpan value.
-            TimeSpan ts = stopWatch.Elapsed;
+            Compression.compress(ImageMatrix, huffmanRed, huffmanGreen, huffmanBlue,ulong.Parse(seed),short.Parse(txtGaussSigma.Text));
+            ts = stopWatch.Elapsed;
             // Format and display the TimeSpan value.
-            string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
-                ts.Hours, ts.Minutes, ts.Seconds,
-                ts.Milliseconds / 10);
+            elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+               ts.Hours, ts.Minutes, ts.Seconds,
+               ts.Milliseconds / 10);
 
-            compressTime.Text = "RunTime " + elapsedTime;
+            label12.Text = elapsedTime;
+
+            RGBPixel[,] ImageMatrix2 = Compression.decompress("compressEncode.bin");
+            ImageOperations.DisplayImage(ImageMatrix2, pictureBox3);
+            ts = stopWatch.Elapsed;
+            // Format and display the TimeSpan value.
+            elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+               ts.Hours, ts.Minutes, ts.Seconds,
+               ts.Milliseconds / 10);
+
+            label11.Text = elapsedTime;
+            stopWatch.Stop();
+
 
         }
 
+        private void pictureBox3_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
