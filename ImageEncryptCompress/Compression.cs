@@ -33,7 +33,6 @@ namespace ImageQuantization
 
             tempRed.AddRange(tempGreen);
             tempRed.AddRange(tempBlue);
-<<<<<<< HEAD
 
             byte[] RedTree = Encoding.ASCII.GetBytes(huffmanRed.writeHuffman());
             byte[] greenTree = Encoding.ASCII.GetBytes(huffmanGreen.writeHuffman());
@@ -77,13 +76,7 @@ namespace ImageQuantization
             File.WriteAllBytes(fileName, bytes2.ToArray());
 
 
-
-=======
-            byte[] bytes = new byte[tempRed.Count / 8 + (tempRed.Count % 8 == 0 ? 0 : 1)];
-            BitArray d = new BitArray(tempRed.ToArray());
-            d.CopyTo(bytes, 0);
-            File.WriteAllBytes(fileName, bytes);
->>>>>>> origin/master
-        }
+            
+         }
     }
 }

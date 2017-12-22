@@ -91,21 +91,10 @@ namespace ImageQuantization
             {
                 s += Colors[i].color;
                 s += ":";
-             
                 s += Colors[i].frequnecy;
                 s += ":";
-                s += Colors[i].Binary;
 
-               
-                for(int k = 0; k< jj; k++)
-                {
-                    if (Colors[i].Binary[k])
-                        s += "1";
-                    else
-                        s += "0";
-                }
-             
-            }
+                 }
             return s;
         }
 

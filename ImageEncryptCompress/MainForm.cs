@@ -36,8 +36,7 @@ namespace ImageQuantization
 
         private void btnGaussSmooth_Click(object sender, EventArgs e)
         {
-            int  tap = Int16.Parse(txtGaussSigma.Text);
-		string seed = textBox1.Text;
+            int tap = Int16.Parse(txtGaussSigma.Text);
             string seed = textBox1.Text;
             // start stopwatch
             Stopwatch stopWatch = new Stopwatch();
@@ -57,29 +56,20 @@ namespace ImageQuantization
             double compressedSize = huffmanRed.getCompressedSize() + huffmanGreen.getCompressedSize() + huffmanBlue.getCompressedSize();
             double compressionRatio = (compressedSize / originalSize) * 100;
             Huffman.clearFile();
-            Compression.compress(ImageMatrix, huffmanRed, huffmanGreen, huffmanBlue,seed, short.Parse(txtGaussSigma.Text));
-            
-
-        }
-
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-            Compression.compress(ImageMatrix, huffmanRed, huffmanGreen, huffmanBlue);
-            huffmanRed.writeHuffman("Red");
-            huffmanGreen.writeHuffman("Green");
-            huffmanBlue.writeHuffman("Blue");
+            Compression.compress(ImageMatrix, huffmanRed, huffmanGreen, huffmanBlue, seed, short.Parse(txtGaussSigma.Text));
 
             // stop stopwatch
             stopWatch.Stop();
             // Get the elapsed time as a TimeSpan value.
             TimeSpan ts = stopWatch.Elapsed;
-
             // Format and display the TimeSpan value.
             string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
                 ts.Hours, ts.Minutes, ts.Seconds,
                 ts.Milliseconds / 10);
 
             compressTime.Text = "RunTime " + elapsedTime;
+
         }
+
     }
 }
