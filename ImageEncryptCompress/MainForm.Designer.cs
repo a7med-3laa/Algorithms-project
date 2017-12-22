@@ -44,6 +44,7 @@ namespace ImageQuantization
             this.panel2 = new System.Windows.Forms.Panel();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.compressTime = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.panel1.SuspendLayout();
@@ -206,11 +207,21 @@ namespace ImageQuantization
             this.label7.TabIndex = 18;
             this.label7.Text = "initial Seed";
             // 
+            // compressTime
+            // 
+            this.compressTime.AutoSize = true;
+            this.compressTime.Location = new System.Drawing.Point(1004, 66);
+            this.compressTime.Name = "compressTime";
+            this.compressTime.Size = new System.Drawing.Size(74, 13);
+            this.compressTime.TabIndex = 19;
+            this.compressTime.Text = "compressTime";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(904, 500);
+            this.ClientSize = new System.Drawing.Size(1202, 500);
+            this.Controls.Add(this.compressTime);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.panel2);
@@ -257,6 +268,7 @@ namespace ImageQuantization
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label compressTime;
     }
 }
 

@@ -10,13 +10,14 @@ namespace ImageQuantization
         public Node left, right;
         public int frequnecy;
         public byte color;
-        public string Binary;
+        public List<bool> Binary;
         public Node()
         {
             left = null;
             right = null;
             frequnecy = 0;
             color = 0;
+            Binary = new List<bool>();
         }
 
         public Node(byte C,int F)
@@ -25,6 +26,7 @@ namespace ImageQuantization
             right = null;
             frequnecy = F;
             color = C;
+            Binary = new List<bool>();
         }
         public bool hasChildreen()
         {

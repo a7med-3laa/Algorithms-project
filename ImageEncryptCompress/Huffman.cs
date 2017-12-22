@@ -19,19 +19,30 @@ namespace ImageQuantization
         
 
         public List<Node> Colors = new List<Node>();
-        public Dictionary<byte, KeyValuePair<int, string>> ColorsMap = new Dictionary<byte, KeyValuePair<int, string>>();
+        public Dictionary<byte, KeyValuePair<int, List<bool>>> ColorsMap = new Dictionary<byte, KeyValuePair<int, List<bool>>>();
         public void getBinary(Node parent,string bin)
         {
             if (!parent.hasChildreen())
             {
-                parent.Binary = bin;
+                List<bool> bb = new List<bool>();
+                char[] c = bin.ToCharArray();
+                for (int i = 0; i < c.Length; i++)
+                    if (c[i] == '0')
+                        bb.Add(false);
+                    else
+                        bb.Add(true);
+                parent.Binary = bb;
                 Colors.Add(parent);
-                ColorsMap.Add(parent.color, new KeyValuePair<int, string>(parent.frequnecy, parent.Binary));
+                ColorsMap.Add(parent.color, new KeyValuePair<int, List<bool>>(parent.frequnecy, parent.Binary));
             }
             if(parent.left != null)
+            {
                 getBinary(parent.left, bin + "0");
+            }
             if (parent.right != null)
+            {
                 getBinary(parent.right, bin + "1");
+            }
         }
 
         private void constructTree()
@@ -84,6 +95,16 @@ namespace ImageQuantization
                 s += Colors[i].frequnecy;
                 s += ":";
                 s += Colors[i].Binary;
+
+               
+                for(int k = 0; k< jj; k++)
+                {
+                    if (Colors[i].Binary[k])
+                        s += "1";
+                    else
+                        s += "0";
+                }
+             
             }
             return s;
         }
@@ -92,7 +113,7 @@ namespace ImageQuantization
         {
             long ans = 0;
             for(int i = 0; i < Colors.Count; i++)
-                ans += ColorsMap[Colors[i].color].Value.Length * ColorsMap[Colors[i].color].Key;            
+                ans += ColorsMap[Colors[i].color].Value.Count * ColorsMap[Colors[i].color].Key;            
             return ans;
         }
     }
