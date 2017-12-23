@@ -66,7 +66,7 @@ namespace ImageQuantization
             double compressedSize = huffmanRed.getCompressedSize() + huffmanGreen.getCompressedSize() + huffmanBlue.getCompressedSize();
             double compressionRatio = (compressedSize / originalSize) * 100;
             Huffman.clearFile();
-            Compression.compress(ImageMatrix, huffmanRed, huffmanGreen, huffmanBlue,ulong.Parse(seed),short.Parse(txtGaussSigma.Text));
+            Compression.compress(ImageMatrix, huffmanRed, huffmanGreen, huffmanBlue,seed,short.Parse(txtGaussSigma.Text));
             ts = stopWatch.Elapsed;
             // Format and display the TimeSpan value.
             elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",

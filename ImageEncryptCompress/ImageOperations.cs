@@ -166,6 +166,7 @@ namespace ImageQuantization
             return seed;
         }
 
+
         public static RGBPixel[,] encrypt(RGBPixel[,] mat, int tap,string seed)
         {
             ulong key2 = Convert.ToUInt64(seed, 2);

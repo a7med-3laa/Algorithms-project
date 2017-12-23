@@ -13,7 +13,7 @@ namespace ImageQuantization
     {
         static string fileName = "compressEncode.bin";
         static int count = 0;
-        public static void compress(RGBPixel[,] ImageMatrix, Huffman huffmanRed, Huffman huffmanGreen, Huffman huffmanBlue,ulong seed,short tap)
+        public static void compress(RGBPixel[,] ImageMatrix, Huffman huffmanRed, Huffman huffmanGreen, Huffman huffmanBlue,string seed,short tap)
         {
             List<bool> tempRed = new List<bool>();
             List<bool> tempBlue = new List<bool>();
@@ -38,15 +38,13 @@ namespace ImageQuantization
             byte[] blueTreeLength = BitConverter.GetBytes(blueTree.Length);
             byte[] width = BitConverter.GetBytes(ImageMatrix.GetLength(0));
             byte[] hight = BitConverter.GetBytes(ImageMatrix.GetLength(1));
-            byte[] seed2 = BitConverter.GetBytes(seed);
+            byte[] seed2Length = BitConverter.GetBytes(seed.Length);
+            byte[] seed2 = Encoding.ASCII.GetBytes(seed);
             byte[] tap1 = BitConverter.GetBytes(tap);
-            byte[] redListLength = BitConverter.GetBytes(tempRed.Count);
-            byte[] blueListLength = BitConverter.GetBytes(tempGreen.Count);
-            byte[] grrenListLength = BitConverter.GetBytes(tempBlue.Count);
-
+            
             int fileLength = (RedTree.Length) + greenTree.Length + blueTree.Length +
                 redTreeLength.Length + greenTreeLength.Length + blueTreeLength.Length +
-                width.Length + hight.Length + seed2.Length + tap1.Length + 12;
+                width.Length + hight.Length + seed2.Length + tap1.Length + 16;
 
             List<Byte> bytes2 = new List<Byte>(fileLength + (tempRed.Count / 8 + (tempRed.Count % 8 == 0 ? 0 : 1)));
             bytes2.AddRange(redTreeLength);
@@ -57,14 +55,11 @@ namespace ImageQuantization
             bytes2.AddRange(blueTree);
             bytes2.AddRange(width);
             bytes2.AddRange(hight);
+            bytes2.AddRange(seed2Length);
             bytes2.AddRange(seed2);
             bytes2.AddRange(tap1);
-            bytes2.AddRange(redListLength);
-            bytes2.AddRange(grrenListLength);
-            bytes2.AddRange(blueListLength);
-
+            
             Byte[] bytes = new byte[tempRed.Count / 8 + (tempRed.Count % 8 == 0 ? 0 : 1)];
-
             BitArray d = new BitArray(tempRed.ToArray());
             d.CopyTo(bytes, 0);
             bytes2.AddRange(bytes);
@@ -79,7 +74,7 @@ namespace ImageQuantization
             Huffman huffmanRed = new Huffman(getPriorityQueue(Encoding.ASCII.GetString(fileData,4,RedTreesize)));
 
             int greenTreesize = BitConverter.ToInt32(fileData, RedTreesize + 4);
-            Huffman huffmanGreen = new Huffman(getPriorityQueue(Encoding.ASCII.GetString(fileData, 8 + greenTreesize, greenTreesize)));
+            Huffman huffmanGreen = new Huffman(getPriorityQueue(Encoding.ASCII.GetString(fileData, 8 + RedTreesize, greenTreesize)));
 
             int blueTreesize = BitConverter.ToInt32(fileData, 8 + greenTreesize + RedTreesize) ;
             Huffman huffmanBlue = new Huffman(getPriorityQueue(Encoding.ASCII.GetString(fileData, 12 + greenTreesize + RedTreesize, blueTreesize)));
@@ -88,25 +83,20 @@ namespace ImageQuantization
             fileoffset += 4;
             int height= BitConverter.ToInt32(fileData, fileoffset);
             fileoffset += 4;
-            ulong seed = BitConverter.ToUInt64(fileData, fileoffset);
-            fileoffset +=8;
+            int seedLength = BitConverter.ToInt32(fileData, fileoffset);
+            fileoffset += 4;
+            string seed = Encoding.ASCII.GetString(fileData,fileoffset,seedLength);
+            fileoffset +=seedLength;
             int tap = (int)BitConverter.ToInt16(fileData, fileoffset);
             fileoffset += 2;
-            int redListLength= BitConverter.ToInt32(fileData, fileoffset);
-            fileoffset += 4;
-            int greenListLength = BitConverter.ToInt32(fileData, fileoffset);
-            fileoffset += 4;
-            int blueListLength = BitConverter.ToInt32(fileData, fileoffset);
-            fileoffset += 4;
-
+            
             byte[] bin = new byte[fileData.Length - fileoffset];
             Array.Copy(fileData, fileoffset, bin, 0,fileData.Length - fileoffset);
             BitArray b = new BitArray(bin);
-            Boolean[] binary = new Boolean[120000];
+            Boolean[] binary = new Boolean[b.Length];
             b.CopyTo(binary,0);
             
             //loop for red color
-            int size2 = binary.Length;
             count = 0;
             RGBPixel[,] Image = new RGBPixel[width, height];
             for (int i = 0; i < width; i++)
@@ -117,7 +107,6 @@ namespace ImageQuantization
                 }
             }
             // loop for Green color
-            count = 40000;
             for (int i = 0; i < width; i++)
             {
                 for (int j = 0; j < height; j++)
@@ -125,7 +114,6 @@ namespace ImageQuantization
                     Image[i, j].green = getColor(huffmanGreen.start, binary);
                 }
             }
-            count = 80000;
             // loop for Blue color
             for (int i = 0; i < width; i++)
             {
@@ -134,7 +122,7 @@ namespace ImageQuantization
                     Image[i, j].blue = getColor(huffmanBlue.start, binary);
                 }
             }
-            ImageOperations.encrypt(Image, tap, seed.ToString());
+            ImageOperations.encrypt(Image, tap, seed);
             return Image;
         }
 
