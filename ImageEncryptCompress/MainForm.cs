@@ -86,12 +86,6 @@ namespace ImageQuantization
             label11.Text = elapsedTime;
             stopWatch.Stop();
 
-
-        }
-
-        private void pictureBox3_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }
