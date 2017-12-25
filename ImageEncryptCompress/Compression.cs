@@ -44,7 +44,7 @@ namespace ImageQuantization
             
             int fileLength = (RedTree.Length) + greenTree.Length + blueTree.Length +
                 redTreeLength.Length + greenTreeLength.Length + blueTreeLength.Length +
-                width.Length + hight.Length + seed2.Length + tap1.Length + 16;
+                width.Length + hight.Length + seed2.Length + tap1.Length + 4;
 
             List<Byte> bytes2 = new List<Byte>(fileLength + (tempRed.Count / 8 + (tempRed.Count % 8 == 0 ? 0 : 1)));
             bytes2.AddRange(redTreeLength);
@@ -90,7 +90,7 @@ namespace ImageQuantization
             int tap = (int)BitConverter.ToInt16(fileData, fileoffset);
             fileoffset += 2;
             
-            byte[] bin = new byte[fileData.Length - fileoffset];
+            byte[] bin = new byte[fileData.Length - fileoffset+1];
             Array.Copy(fileData, fileoffset, bin, 0,fileData.Length - fileoffset);
             BitArray b = new BitArray(bin);
             Boolean[] binary = new Boolean[b.Length];
@@ -107,13 +107,14 @@ namespace ImageQuantization
                 }
             }
             // loop for Green color
-            for (int i = 0; i < width; i++)
+             for (int i = 0; i < width; i++)
             {
                 for (int j = 0; j < height; j++)
                 {
                     Image[i, j].green = getColor(huffmanGreen.start, binary);
                 }
             }
+             
             // loop for Blue color
             for (int i = 0; i < width; i++)
             {
@@ -122,7 +123,7 @@ namespace ImageQuantization
                     Image[i, j].blue = getColor(huffmanBlue.start, binary);
                 }
             }
-            ImageOperations.encrypt(Image, tap, seed);
+         ImageOperations.encrypt(Image, tap, seed);
             return Image;
         }
 
