@@ -44,6 +44,15 @@ namespace ImageQuantization
             this.data = new List<Node>(256);
         }
 
+        public PriorityQueue(PriorityQueue temp)
+        {
+            this.data = new List<Node>();
+            for(int i = 0; i < temp.data.Count; i++)
+            {
+                data.Add(temp.data[i]);
+            }
+        }
+
         public void Enqueue(Node item)
         {
             data.Add(item);
