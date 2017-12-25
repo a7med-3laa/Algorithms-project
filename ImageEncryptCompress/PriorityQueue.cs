@@ -52,6 +52,8 @@ namespace ImageQuantization
          }
  
 
+       
+
         public void Enqueue(Node item)
         {
             data.Add(item);

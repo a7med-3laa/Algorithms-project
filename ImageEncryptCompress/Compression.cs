@@ -125,12 +125,9 @@ namespace ImageQuantization
             Boolean[] binaryB = new Boolean[blueL];
 
             Array.Copy(binary, redL+greenL, binaryB, 0, blueL);
-      
-
-            RGBPixel[,] Image = new RGBPixel[width, height];
+   RGBPixel[,] Image = new RGBPixel[width, height];
            
-            // loop for Green color
-            for (int i = 0; i < width; i++)
+             for (int i = 0; i < width; i++)
             {
                 for (int j = 0; j < height; j++)
                 {
@@ -140,6 +137,7 @@ namespace ImageQuantization
 
                 }
             }
+             
          ImageOperations.encrypt(Image, tap, seed);
             return Image;
         }
