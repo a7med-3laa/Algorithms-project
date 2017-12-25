@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace ImageQuantization
-{
-    public class Node
+{   public class Node
     {
         public Node left, right;
         public int frequnecy;
@@ -43,6 +42,15 @@ namespace ImageQuantization
         {
             this.data = new List<Node>(256);
         }
+        public PriorityQueue(PriorityQueue temp)
+         {
+             this.data = new List<Node>();
+             for(int i = 0; i<temp.data.Count; i++)
+             {
+                 data.Add(temp.data[i]);
+             }
+         }
+ 
 
         public void Enqueue(Node item)
         {
@@ -93,6 +101,11 @@ namespace ImageQuantization
         public int Count()
         {
             return data.Count;
+        }
+        public List<Node> getList()
+        {
+
+            return data;
         }
         public int CompareTo(Node other1, Node other2)
         {

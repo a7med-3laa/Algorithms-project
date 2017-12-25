@@ -12,13 +12,15 @@ namespace ImageQuantization
     class Compression
     {
         static string fileName = "compressEncode.bin";
-        static int count = 0;
+        static int countR = 0;
+        static int countG = 0;
+        static int countB = 0;
+
         public static void compress(RGBPixel[,] ImageMatrix, Huffman huffmanRed, Huffman huffmanGreen, Huffman huffmanBlue,string seed,short tap)
         {
             List<bool> tempRed = new List<bool>();
             List<bool> tempBlue = new List<bool>();
             List<bool> tempGreen = new List<bool>();
-            int count = 0;
             for (int i = 0; i < ImageMatrix.GetLength(0); i++)
             {
                 for (int j = 0; j < ImageMatrix.GetLength(1); j++)
@@ -41,12 +43,15 @@ namespace ImageQuantization
             byte[] seed2Length = BitConverter.GetBytes(seed.Length);
             byte[] seed2 = Encoding.ASCII.GetBytes(seed);
             byte[] tap1 = BitConverter.GetBytes(tap);
+            byte[] redL = BitConverter.GetBytes(tempRed.Count);
+            byte[] greenL = BitConverter.GetBytes(tempGreen.Count);
+            byte[] blueL = BitConverter.GetBytes(tempBlue.Count);
             
             int fileLength = (RedTree.Length) + greenTree.Length + blueTree.Length +
                 redTreeLength.Length + greenTreeLength.Length + blueTreeLength.Length +
-                width.Length + hight.Length + seed2.Length + tap1.Length + 16;
+                width.Length + hight.Length + seed2.Length + tap1.Length + 4;
 
-            List<Byte> bytes2 = new List<Byte>(fileLength + (tempRed.Count / 8 + (tempRed.Count % 8 == 0 ? 0 : 1)));
+            List<Byte> bytes2 = new List<Byte>();
             bytes2.AddRange(redTreeLength);
             bytes2.AddRange(RedTree);
             bytes2.AddRange(greenTreeLength);
@@ -58,7 +63,10 @@ namespace ImageQuantization
             bytes2.AddRange(seed2Length);
             bytes2.AddRange(seed2);
             bytes2.AddRange(tap1);
-            
+            bytes2.AddRange(redL);
+            bytes2.AddRange(greenL);
+            bytes2.AddRange(blueL);
+
             Byte[] bytes = new byte[tempRed.Count / 8 + (tempRed.Count % 8 == 0 ? 0 : 1)];
             BitArray d = new BitArray(tempRed.ToArray());
             d.CopyTo(bytes, 0);
@@ -66,8 +74,11 @@ namespace ImageQuantization
             File.WriteAllBytes(fileName, bytes2.ToArray());
         }
 
-        public static RGBPixel[,] decompress(string path)
+        public static RGBPixel[,] decompress(string path,RGBPixel[,] temp2)
         {
+            countB = 0;
+            countR = 0;
+            countG = 0;
             int fileoffset;
             byte[] fileData=  File.ReadAllBytes(path);
             int RedTreesize = BitConverter.ToInt32(fileData, 0);
@@ -89,66 +100,73 @@ namespace ImageQuantization
             fileoffset +=seedLength;
             int tap = (int)BitConverter.ToInt16(fileData, fileoffset);
             fileoffset += 2;
-            
-            byte[] bin = new byte[fileData.Length - fileoffset];
-            Array.Copy(fileData, fileoffset, bin, 0,fileData.Length - fileoffset);
-            BitArray b = new BitArray(bin);
-            Boolean[] binary = new Boolean[b.Length];
-            b.CopyTo(binary,0);
-            
-            //loop for red color
-            count = 0;
+            int redL = BitConverter.ToInt32(fileData, fileoffset);
+            fileoffset += 4;
+            int greenL = BitConverter.ToInt32(fileData, fileoffset);
+            fileoffset += 4;
+            int blueL = BitConverter.ToInt32(fileData, fileoffset);
+            fileoffset += 4;
+            redL -= greenL;
+            redL -= blueL;
+            byte[] binR = new byte[fileData.Length-fileoffset];
+            Array.Copy(fileData, fileoffset, binR, 0, fileData.Length - fileoffset);            
+           
+            BitArray bR = new BitArray(binR);
+            Boolean[] binary = new Boolean[bR.Count];
+            bR.CopyTo(binary,0);
+
+
+            Boolean[] binaryR = new Boolean[redL];
+            Array.Copy(binary, 0, binaryR, 0, redL);
+
+            Boolean[] binaryG = new Boolean[greenL];
+
+            Array.Copy(binary, redL, binaryG, 0, greenL);
+            Boolean[] binaryB = new Boolean[blueL];
+
+            Array.Copy(binary, redL+greenL, binaryB, 0, blueL);
+      
+
             RGBPixel[,] Image = new RGBPixel[width, height];
-            for (int i = 0; i < width; i++)
-            {
-                for (int j = 0; j < height; j++)
-                {
-                    Image[i, j].red = getColor(huffmanRed.start, binary);
-                }
-            }
+           
             // loop for Green color
             for (int i = 0; i < width; i++)
             {
                 for (int j = 0; j < height; j++)
                 {
-                    Image[i, j].green = getColor(huffmanGreen.start, binary);
+                    Image[i, j].red = getColor(huffmanRed.start, binaryR,ref countR);
+                    Image[i, j].green = getColor(huffmanGreen.start, binaryG,ref countG);
+                    Image[i, j].blue = getColor(huffmanBlue.start, binaryB,ref countB);
+
                 }
             }
-            // loop for Blue color
-            for (int i = 0; i < width; i++)
-            {
-                for (int j = 0; j < height; j++)
-                {
-                    Image[i, j].blue = getColor(huffmanBlue.start, binary);
-                }
-            }
-            ImageOperations.encrypt(Image, tap, seed);
+         ImageOperations.encrypt(Image, tap, seed);
             return Image;
         }
 
-        private static byte getColor(Node start,  Boolean[] s)
+        private static byte getColor(Node start,  Boolean[] s,ref int count)
         {
             Node n = start;
             while (n.hasChildreen())
-            {     
+            {    
                 if (s[count]==false)
                     n = n.left;
                 else
                     n = n.right;
                 count++;
             }
+
             return n.color;
         }
         public static PriorityQueue getPriorityQueue(string s)
         {
-            s = s.Substring(1, s.Length - 2);
            PriorityQueue tempDic = new PriorityQueue();
-            string[] temp = s.Split(',');
+            string[] temp = s.Split(new char[] {','},StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i < temp.Length; i++)
             {   int color = Int32.Parse(temp[i]);
                 i++;
                 int freq = Int32.Parse(temp[i]);
-                  tempDic.Enqueue(new Node((byte)color,freq));         
+                tempDic.Enqueue(new Node((byte)color,freq));         
             }
             return tempDic;
 

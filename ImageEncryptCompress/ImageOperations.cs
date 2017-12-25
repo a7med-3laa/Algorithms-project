@@ -4,9 +4,7 @@ using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Drawing.Imaging;
-///Algorithms Project
-///Intelligent Scissors
-///
+
 
 namespace ImageQuantization
 {
@@ -169,7 +167,7 @@ namespace ImageQuantization
 
         public static RGBPixel[,] encrypt(RGBPixel[,] mat, int tap,string seed)
         {
-            ulong key2 = Convert.ToUInt64(seed, 2);
+             ulong key2 = Convert.ToUInt64(seed, 2);
             ulong mask;
             int Height = GetHeight(mat);
             int Width = GetWidth(mat);

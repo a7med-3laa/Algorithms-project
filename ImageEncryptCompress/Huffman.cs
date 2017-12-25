@@ -10,11 +10,15 @@ namespace ImageQuantization
     {
         public Node start;
         PriorityQueue nodes;
+        PriorityQueue nodes2;
+
         public Huffman(PriorityQueue n)
         {
             nodes = n;
             start = null;
+            nodes2 = new PriorityQueue(n);
             constructTree();
+
         }
         
 
@@ -22,6 +26,10 @@ namespace ImageQuantization
         public Dictionary<byte, KeyValuePair<int, List<bool>>> ColorsMap = new Dictionary<byte, KeyValuePair<int, List<bool>>>();
         public void getBinary(Node parent,string bin)
         {
+            if (parent.right != null)
+            {
+                getBinary(parent.right, bin + "1");
+            }
             if (!parent.hasChildreen())
             {
                 List<bool> bb = new List<bool>();
@@ -35,13 +43,10 @@ namespace ImageQuantization
                 Colors.Add(parent);
                 ColorsMap.Add(parent.color, new KeyValuePair<int, List<bool>>(parent.frequnecy, parent.Binary));
             }
-            if(parent.left != null)
+
+            if (parent.left != null)
             {
                 getBinary(parent.left, bin + "0");
-            }
-            if (parent.right != null)
-            {
-                getBinary(parent.right, bin + "1");
             }
         }
 
@@ -52,20 +57,6 @@ namespace ImageQuantization
             {
                 Node right = nodes.Dequeue();
                 Node left = nodes.Dequeue();
-
-                if(left.color > right.color && (!left.hasChildreen() && !right.hasChildreen()))
-                {
-                    Node temp = right;
-                    right = left;
-                    left = temp;
-                }
-
-                if(left.hasChildreen() && !right.hasChildreen())
-                {
-                    Node temp = right;
-                    right = left;
-                    left = temp;
-                }
                 tmp.left = left;
                 tmp.right = right;
                 tmp.frequnecy = left.frequnecy + right.frequnecy;
@@ -78,23 +69,19 @@ namespace ImageQuantization
             start = nodes.Dequeue();
             getBinary(start,"");
         }
-
-        static public void clearFile()
-        {
-            //    string filename = "huffman.txt";
-            //    File.WriteAllText(filename, "");
-        }
         public String writeHuffman()
         {
-            string s = "0";
-            for (int i = 0; i < Colors.Count; i++)
+            string s = "";
+            List<Node> dos = nodes2.getList();
+            for (int i = 0; i < dos.Count; i++)
             {
-                s += Colors[i].color;
+                Node n = dos[i];
+                s += n.color;
                 s += ",";
-                s += Colors[i].frequnecy;
+                s += n.frequnecy;
                 s += ",";
 
-                 }
+            }
             return s;
         }
 

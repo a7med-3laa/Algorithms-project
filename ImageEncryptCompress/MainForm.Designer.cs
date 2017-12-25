@@ -65,17 +65,17 @@ namespace ImageQuantization
             // 
             this.pictureBox1.Location = new System.Drawing.Point(3, 3);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(400, 360);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pictureBox1.Size = new System.Drawing.Size(412, 360);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Location = new System.Drawing.Point(2, 3);
+            this.pictureBox2.Location = new System.Drawing.Point(3, 3);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(412, 360);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox2.TabIndex = 1;
             this.pictureBox2.TabStop = false;
             // 
@@ -181,12 +181,11 @@ namespace ImageQuantization
             // panel1
             // 
             this.panel1.AutoScroll = true;
-            this.panel1.AutoScrollMinSize = new System.Drawing.Size(1, 1);
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Location = new System.Drawing.Point(12, 12);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(400, 371);
+            this.panel1.Size = new System.Drawing.Size(420, 370);
             this.panel1.TabIndex = 15;
             // 
             // panel2
@@ -194,9 +193,9 @@ namespace ImageQuantization
             this.panel2.AutoScroll = true;
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel2.Controls.Add(this.pictureBox2);
-            this.panel2.Location = new System.Drawing.Point(437, 12);
+            this.panel2.Location = new System.Drawing.Point(444, 12);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(421, 371);
+            this.panel2.Size = new System.Drawing.Size(420, 370);
             this.panel2.TabIndex = 16;
             // 
             // textBox1
@@ -222,27 +221,27 @@ namespace ImageQuantization
             this.compressTime.AutoSize = true;
             this.compressTime.Location = new System.Drawing.Point(858, 466);
             this.compressTime.Name = "compressTime";
-            this.compressTime.Size = new System.Drawing.Size(83, 13);
+            this.compressTime.Size = new System.Drawing.Size(82, 13);
             this.compressTime.TabIndex = 19;
             this.compressTime.Text = "Compress Time:";
             // 
             // pictureBox3
             // 
-            this.pictureBox3.Location = new System.Drawing.Point(3, 15);
+            this.pictureBox3.Location = new System.Drawing.Point(3, 3);
             this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(360, 320);
-            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pictureBox3.Size = new System.Drawing.Size(412, 360);
+            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox3.TabIndex = 2;
             this.pictureBox3.TabStop = false;
-            this.pictureBox3.Click += new System.EventHandler(this.pictureBox3_Click);
             // 
             // panel3
             // 
+            this.panel3.AutoScroll = true;
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel3.Controls.Add(this.pictureBox3);
-            this.panel3.Location = new System.Drawing.Point(876, 17);
+            this.panel3.Location = new System.Drawing.Point(876, 12);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(400, 360);
+            this.panel3.Size = new System.Drawing.Size(420, 370);
             this.panel3.TabIndex = 20;
             // 
             // label3
@@ -251,16 +250,16 @@ namespace ImageQuantization
             this.label3.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.Location = new System.Drawing.Point(1000, 393);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(162, 19);
+            this.label3.Size = new System.Drawing.Size(184, 19);
             this.label3.TabIndex = 21;
-            this.label3.Text = "decompress Image";
+            this.label3.Text = "Decompressed Image";
             // 
             // label8
             // 
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(841, 448);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(97, 13);
+            this.label8.Size = new System.Drawing.Size(98, 13);
             this.label8.TabIndex = 22;
             this.label8.Text = "Decompress Time :";
             // 
@@ -278,7 +277,7 @@ namespace ImageQuantization
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(945, 428);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(67, 13);
+            this.label10.Size = new System.Drawing.Size(64, 13);
             this.label10.TabIndex = 24;
             this.label10.Text = "00:00:00:00";
             // 
@@ -287,7 +286,7 @@ namespace ImageQuantization
             this.label11.AutoSize = true;
             this.label11.Location = new System.Drawing.Point(945, 448);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(67, 13);
+            this.label11.Size = new System.Drawing.Size(64, 13);
             this.label11.TabIndex = 25;
             this.label11.Text = "00:00:00:00";
             // 
@@ -296,7 +295,7 @@ namespace ImageQuantization
             this.label12.AutoSize = true;
             this.label12.Location = new System.Drawing.Point(945, 466);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(67, 13);
+            this.label12.Size = new System.Drawing.Size(64, 13);
             this.label12.TabIndex = 26;
             this.label12.Text = "00:00:00:00";
             // 
@@ -304,7 +303,7 @@ namespace ImageQuantization
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1251, 500);
+            this.ClientSize = new System.Drawing.Size(1308, 500);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.label10);
@@ -332,9 +331,12 @@ namespace ImageQuantization
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -369,4 +371,3 @@ namespace ImageQuantization
         private System.Windows.Forms.Label label12;
     }
 }
-
