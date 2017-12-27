@@ -152,14 +152,16 @@ namespace ImageQuantization
 
         public static ulong lfsr(ulong seed, int N, int tap)
         {
-            bool most_bit, tap_bit, list_bit;                             //o(1)
-            for (int i = 0; i < 8; i++)                                   //o(1)
-            {
-                tap_bit = Convert.ToBoolean(seed & (ulong)(1 << tap));    //o(1)
-                most_bit = Convert.ToBoolean(seed & (ulong)(1 << (N - 1))); //o(1)
-                list_bit = most_bit ^ tap_bit;                              //o(1)
-                seed <<= 1;                                                 //o(1)
-                seed |= Convert.ToUInt64(list_bit);                         //o(1)
+            ulong most_bit, tap_bit, list_bit;                  // let tap = 5
+            for (int i = 0; i < 8; i++)                         //
+            {                                                   //
+                tap_bit = seed & (ulong)(1 << tap);             // tap_bit = (seed) & (00100000) = (00X00000)
+                tap_bit >>= tap;                                // tab_bit = (0000000X)
+                most_bit = seed & (ulong)(1 << (N - 1));        // most_bit = (seed) & (10000000) = (Y0000000)
+                most_bit >>= (N - 1);                           // most_bit = (0000000Y)
+                list_bit = most_bit ^ tap_bit;                  // list_bit = (0000000X) ^ (0000000Y) = (0000000(X^Y))
+                seed <<= 1;                                     // seed =  ((seedbits-1)0) 
+                seed |= list_bit;                          
             }
             return seed;                                                    //o(1)
         }
