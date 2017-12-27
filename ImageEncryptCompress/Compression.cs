@@ -118,8 +118,8 @@ namespace ImageQuantization
             Array.Copy(fileData, fileoffset, binR, 0, fileData.Length - fileoffset);
 
             BitArray bR = new BitArray(binR);
-            
 
+            countBoolean = 0;
             Boolean[] binaryR = new Boolean[redL];
             feedBooleanArray(bR, 0, binaryR, redL);
 
