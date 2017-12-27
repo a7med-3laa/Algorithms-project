@@ -53,6 +53,8 @@ namespace ImageQuantization
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.compressRatio = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.panel1.SuspendLayout();
@@ -221,7 +223,7 @@ namespace ImageQuantization
             this.compressTime.AutoSize = true;
             this.compressTime.Location = new System.Drawing.Point(858, 466);
             this.compressTime.Name = "compressTime";
-            this.compressTime.Size = new System.Drawing.Size(82, 13);
+            this.compressTime.Size = new System.Drawing.Size(83, 13);
             this.compressTime.TabIndex = 19;
             this.compressTime.Text = "Compress Time:";
             // 
@@ -259,7 +261,7 @@ namespace ImageQuantization
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(841, 448);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(98, 13);
+            this.label8.Size = new System.Drawing.Size(97, 13);
             this.label8.TabIndex = 22;
             this.label8.Text = "Decompress Time :";
             // 
@@ -277,7 +279,7 @@ namespace ImageQuantization
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(945, 428);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(64, 13);
+            this.label10.Size = new System.Drawing.Size(67, 13);
             this.label10.TabIndex = 24;
             this.label10.Text = "00:00:00:00";
             // 
@@ -286,7 +288,7 @@ namespace ImageQuantization
             this.label11.AutoSize = true;
             this.label11.Location = new System.Drawing.Point(945, 448);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(64, 13);
+            this.label11.Size = new System.Drawing.Size(67, 13);
             this.label11.TabIndex = 25;
             this.label11.Text = "00:00:00:00";
             // 
@@ -295,15 +297,35 @@ namespace ImageQuantization
             this.label12.AutoSize = true;
             this.label12.Location = new System.Drawing.Point(945, 466);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(64, 13);
+            this.label12.Size = new System.Drawing.Size(67, 13);
             this.label12.TabIndex = 26;
             this.label12.Text = "00:00:00:00";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(1032, 428);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(86, 13);
+            this.label13.TabIndex = 27;
+            this.label13.Text = "Compress ratio :";
+            // 
+            // compressRatio
+            // 
+            this.compressRatio.AutoSize = true;
+            this.compressRatio.Location = new System.Drawing.Point(1124, 428);
+            this.compressRatio.Name = "compressRatio";
+            this.compressRatio.Size = new System.Drawing.Size(84, 13);
+            this.compressRatio.TabIndex = 28;
+            this.compressRatio.Text = "No image Found";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1308, 500);
+            this.Controls.Add(this.compressRatio);
+            this.Controls.Add(this.label13);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.label10);
@@ -369,5 +391,7 @@ namespace ImageQuantization
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label compressRatio;
     }
 }

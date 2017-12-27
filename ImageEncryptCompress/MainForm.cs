@@ -68,6 +68,7 @@ namespace ImageQuantization
             double originalSize = ImageMatrix.GetLength(0) * ImageMatrix.GetLength(1) * 8 * 3;
             double compressedSize = huffmanRed.getCompressedSize() + huffmanGreen.getCompressedSize() + huffmanBlue.getCompressedSize();
             double compressionRatio = (compressedSize / originalSize) * 100;
+            compressRatio.Text = compressRatio + "%";
             Compression.compress(ImageMatrix, huffmanRed, huffmanGreen, huffmanBlue,seed,short.Parse(txtGaussSigma.Text));
             ts = stopWatch.Elapsed;
             // Format and display the TimeSpan value.
@@ -76,8 +77,7 @@ namespace ImageQuantization
                ts.Milliseconds / 10);
 
             label12.Text = elapsedTime;
-            
-            RGBPixel[,] ImageMatrix2 = Compression.decompress("compressEncode.bin",ImageMatrix);
+            RGBPixel[,] ImageMatrix2 = Compression.decompress("compressEncode.bin");
             ImageOperations.DisplayImage(ImageMatrix2, pictureBox3);
             ts = stopWatch.Elapsed;
             // Format and display the TimeSpan value.
