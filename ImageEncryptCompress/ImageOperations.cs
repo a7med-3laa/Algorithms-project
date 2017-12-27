@@ -152,80 +152,80 @@ namespace ImageQuantization
 
         public static ulong lfsr(ulong seed, int N, int tap)
         {
-            bool most_bit, tap_bit , list_bit ;
-            for (int i = 0; i < 8; i++)
+            bool most_bit, tap_bit, list_bit;                             //o(1)
+            for (int i = 0; i < 8; i++)                                   //o(1)
             {
-                tap_bit  = Convert.ToBoolean(seed & (ulong)(1 << tap));
-                most_bit = Convert.ToBoolean(seed & (ulong)(1 << (N - 1)));
-                list_bit = most_bit ^ tap_bit;
-                seed<<= 1;
-                seed |=Convert.ToUInt64(list_bit);
+                tap_bit = Convert.ToBoolean(seed & (ulong)(1 << tap));    //o(1)
+                most_bit = Convert.ToBoolean(seed & (ulong)(1 << (N - 1))); //o(1)
+                list_bit = most_bit ^ tap_bit;                              //o(1)
+                seed <<= 1;                                                 //o(1)
+                seed |= Convert.ToUInt64(list_bit);                         //o(1)
             }
-            return seed;
+            return seed;                                                    //o(1)
         }
 
 
         public static RGBPixel[,] encrypt(RGBPixel[,] mat, int tap,string seed)
         {
-             ulong key2 = Convert.ToUInt64(seed, 2);
-            ulong mask;
-            int Height = GetHeight(mat);
-            int Width = GetWidth(mat);
-         
-            for (int j = 0; j < Height; j++)
+             ulong key2 = Convert.ToUInt64(seed, 2);            //o(1)
+             ulong mask;                                        //o(1)
+             int Height = GetHeight(mat);                       //o(1)
+             int Width = GetWidth(mat);                         //o(1)
+
+            for (int j = 0; j < Height; j++)                    //o(n^2)
             {
-                for (int i = 0; i < Width; i++)
+                for (int i = 0; i < Width; i++)                 //o(n^2)
                 {
-                    key2 = lfsr(key2, seed.Length, tap);
-                    mask = key2 & 0xff;
-                    mat[j, i].red ^= Convert.ToByte(mask);
+                    key2 = lfsr(key2, seed.Length, tap);        //o(n^2)
+                    mask = key2 & 0xff;                         //o(n^2)
+                    mat[j, i].red ^= Convert.ToByte(mask);      //o(n^2)
 
-                    key2 = lfsr(key2, seed.Length, tap);
-                    mask = key2 & 0xff;
-                    mat[j, i].green ^= Convert.ToByte(mask);
+                    key2 = lfsr(key2, seed.Length, tap);        //o(n^2)
+                    mask = key2 & 0xff;                         //o(n^2)
+                    mat[j, i].green ^= Convert.ToByte(mask);    //o(n^2)
 
-                    key2 = lfsr(key2, seed.Length, tap);
-                    mask = key2 & 0xff;
-                    mat[j, i].blue ^= Convert.ToByte(mask);
+                    key2 = lfsr(key2, seed.Length, tap);        //o(n^2)
+                    mask = key2 & 0xff;                         //o(n^2)
+                    mat[j, i].blue ^= Convert.ToByte(mask);     //o(n^2)
                 }
             }
-            return mat;
+            return mat;                                         //o(1)
 
         }
 
         public static void getFrequency(RGBPixel[,] ImageMatrix,
-            PriorityQueue redQ,
-            PriorityQueue greenQ,
-            PriorityQueue blueQ)
+            PriorityQueue redQ,                     //o(1)
+            PriorityQueue greenQ,                   //o(1)
+            PriorityQueue blueQ)                    //o(1)
         {
-            int Height = GetHeight(ImageMatrix);
-            int Width = GetWidth(ImageMatrix);
-            int[] redArr = new int[256];
-            int[] greenArr = new int[256];
-            int[] blueArr = new int[256];
+            int Height = GetHeight(ImageMatrix);    //o(1)
+            int Width = GetWidth(ImageMatrix);      //o(1)
+            int[] redArr = new int[256];            //o(1)
+            int[] greenArr = new int[256];          //o(1)
+            int[] blueArr = new int[256];           //o(1)
 
-            for (int i = 0; i < Height; i++)
+            for (int i = 0; i < Height; i++)        //o(n)
             {
-                for (int j = 0; j < Width; j++)
+                for (int j = 0; j < Width; j++)     //o(n^2)
                 {
-                    redArr[ImageMatrix[i, j].red]++;
-                    greenArr[ImageMatrix[i, j].green]++;
-                    blueArr[ImageMatrix[i, j].blue]++;
+                    redArr[ImageMatrix[i, j].red]++;    //o(n^2)
+                    greenArr[ImageMatrix[i, j].green]++;    //o(n^2)
+                    blueArr[ImageMatrix[i, j].blue]++;  //o(n^2)
                 }
             }
-            for (int i = 0; i < 256; i++)
+            for (int i = 0; i < 256; i++)               //o(1)
             {
-                if (redArr[i] != 0)
+                if (redArr[i] != 0)                     //o(1)
                 {
-                    redQ.Enqueue(new Node((byte) i, redArr[i]));
+                    redQ.Enqueue(new Node((byte)i, redArr[i]));    //o(1)
                 }
-                if (greenArr[i] != 0)
+                if (greenArr[i] != 0)                   //o(1)
                 {
-                    greenQ.Enqueue(new Node((byte) i, greenArr[i]));
+                    greenQ.Enqueue(new Node((byte)i, greenArr[i])); //o(1)
                 }
-                if (blueArr[i] != 0)
+                if (blueArr[i] != 0)                    //o(1)
                 {
-                    blueQ.Enqueue(new Node((byte) i, blueArr[i]));
+                    blueQ.Enqueue(new Node((byte)i, blueArr[i]));  //o(1)
                 }
             }
         }
