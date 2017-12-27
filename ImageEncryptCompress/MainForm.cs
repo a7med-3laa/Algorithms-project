@@ -68,7 +68,7 @@ namespace ImageQuantization
             double originalSize = ImageMatrix.GetLength(0) * ImageMatrix.GetLength(1) * 8 * 3;
             double compressedSize = huffmanRed.getCompressedSize() + huffmanGreen.getCompressedSize() + huffmanBlue.getCompressedSize();
             double compressionRatio = (compressedSize / originalSize) * 100;
-            compressRatio.Text = compressRatio + "%";
+            compressRatio.Text = compressionRatio + "%";
             Compression.compress(ImageMatrix, huffmanRed, huffmanGreen, huffmanBlue,seed,short.Parse(txtGaussSigma.Text));
             ts = stopWatch.Elapsed;
             // Format and display the TimeSpan value.

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
@@ -31,6 +31,8 @@ namespace ImageQuantization
         /// </summary>
         /// <param name="ImagePath">Image file path</param>
         /// <returns>2D array of colors</returns>
+        /// 
+
         public static RGBPixel[,] OpenImage(string ImagePath)
         {
             Bitmap original_bm = new Bitmap(ImagePath);
@@ -152,82 +154,82 @@ namespace ImageQuantization
 
         public static ulong lfsr(ulong seed, int N, int tap)
         {
-            ulong most_bit, tap_bit, list_bit;                  // let tap = 5
-            for (int i = 0; i < 8; i++)                         //
-            {                                                   //
-                tap_bit = seed & (ulong)(1 << tap);             // tap_bit = (seed) & (00100000) = (00X00000)
-                tap_bit >>= tap;                                // tab_bit = (0000000X)
-                most_bit = seed & (ulong)(1 << (N - 1));        // most_bit = (seed) & (10000000) = (Y0000000)
-                most_bit >>= (N - 1);                           // most_bit = (0000000Y)
-                list_bit = most_bit ^ tap_bit;                  // list_bit = (0000000X) ^ (0000000Y) = (0000000(X^Y))
-                seed <<= 1;                                     // seed =  ((seedbits-1)0) 
+            ulong most_bit, tap_bit, list_bit;                   //Θ(1)
+            for (int i = 0; i < 8; i++)                          //Θ(1)
+            {                                                   
+                tap_bit = seed & (ulong)(1 << tap);              //Θ(1)
+                tap_bit >>= tap;                                 //Θ(1)
+                most_bit = seed & (ulong)(1 << (N - 1));         //Θ(1)
+                most_bit >>= (N - 1);                            //Θ(1)
+                list_bit = most_bit ^ tap_bit;                   //Θ(1)
+                seed <<= 1;                                      //Θ(1) 
                 seed |= list_bit;                          
             }
-            return seed;                                                    //o(1)
+            return seed;                                                    //Θ(1)
         }
 
 
         public static RGBPixel[,] encrypt(RGBPixel[,] mat, int tap,string seed)
         {
-             ulong key2 = Convert.ToUInt64(seed, 2);            //o(1)
-             ulong mask;                                        //o(1)
-             int Height = GetHeight(mat);                       //o(1)
-             int Width = GetWidth(mat);                         //o(1)
+             ulong key2 = Convert.ToUInt64(seed, 2);            //Θ(1)
+             ulong mask;                                        //Θ(1)
+             int Height = GetHeight(mat);                       //Θ(1)
+             int Width = GetWidth(mat);                         //Θ(1)
 
-            for (int j = 0; j < Height; j++)                    //o(n^2)
+            for (int j = 0; j < Height; j++)                    //Θ(n^2)
             {
-                for (int i = 0; i < Width; i++)                 //o(n^2)
+                for (int i = 0; i < Width; i++)                 //Θ(n^2)
                 {
-                    key2 = lfsr(key2, seed.Length, tap);        //o(n^2)
-                    mask = key2 & 0xff;                         //o(n^2)
-                    mat[j, i].red ^= Convert.ToByte(mask);      //o(n^2)
+                    key2 = lfsr(key2, seed.Length, tap);        //Θ(n^2)
+                    mask = key2 & 0xff;                         //Θ(n^2)
+                    mat[j, i].red ^= Convert.ToByte(mask);      //Θ(n^2)
 
-                    key2 = lfsr(key2, seed.Length, tap);        //o(n^2)
-                    mask = key2 & 0xff;                         //o(n^2)
-                    mat[j, i].green ^= Convert.ToByte(mask);    //o(n^2)
+                    key2 = lfsr(key2, seed.Length, tap);        //Θ(n^2)
+                    mask = key2 & 0xff;                         //Θ(n^2)
+                    mat[j, i].green ^= Convert.ToByte(mask);    //Θ(n^2)
 
-                    key2 = lfsr(key2, seed.Length, tap);        //o(n^2)
-                    mask = key2 & 0xff;                         //o(n^2)
-                    mat[j, i].blue ^= Convert.ToByte(mask);     //o(n^2)
+                    key2 = lfsr(key2, seed.Length, tap);        //Θ(n^2)
+                    mask = key2 & 0xff;                         //Θ(n^2)
+                    mat[j, i].blue ^= Convert.ToByte(mask);     //Θ(n^2)
                 }
             }
-            return mat;                                         //o(1)
+            return mat;                                         //Θ(1)
 
         }
 
         public static void getFrequency(RGBPixel[,] ImageMatrix,
-            PriorityQueue redQ,                     //o(1)
-            PriorityQueue greenQ,                   //o(1)
-            PriorityQueue blueQ)                    //o(1)
+            PriorityQueue redQ,                     //Θ(1)
+            PriorityQueue greenQ,                   //Θ(1)
+            PriorityQueue blueQ)                    //Θ(1)
         {
-            int Height = GetHeight(ImageMatrix);    //o(1)
-            int Width = GetWidth(ImageMatrix);      //o(1)
-            int[] redArr = new int[256];            //o(1)
-            int[] greenArr = new int[256];          //o(1)
-            int[] blueArr = new int[256];           //o(1)
+            int Height = GetHeight(ImageMatrix);    //Θ(1)
+            int Width = GetWidth(ImageMatrix);      //Θ(1)
+            int[] redArr = new int[256];            //Θ(1)
+            int[] greenArr = new int[256];          //Θ(1)
+            int[] blueArr = new int[256];           //Θ(1)
 
-            for (int i = 0; i < Height; i++)        //o(n)
+            for (int i = 0; i < Height; i++)        //Θ(n)
             {
-                for (int j = 0; j < Width; j++)     //o(n^2)
+                for (int j = 0; j < Width; j++)     //Θ(n^2)
                 {
-                    redArr[ImageMatrix[i, j].red]++;    //o(n^2)
-                    greenArr[ImageMatrix[i, j].green]++;    //o(n^2)
-                    blueArr[ImageMatrix[i, j].blue]++;  //o(n^2)
+                    redArr[ImageMatrix[i, j].red]++;    //Θ(n^2)
+                    greenArr[ImageMatrix[i, j].green]++;    //Θ(n^2)
+                    blueArr[ImageMatrix[i, j].blue]++;  //Θ(n^2)
                 }
             }
-            for (int i = 0; i < 256; i++)               //o(1)
+            for (int i = 0; i < 256; i++)               //Θ(1)
             {
-                if (redArr[i] != 0)                     //o(1)
+                if (redArr[i] != 0)                     //Θ(1)
                 {
-                    redQ.Enqueue(new Node((byte)i, redArr[i]));    //o(1)
+                    redQ.Enqueue(new Node((byte)i, redArr[i]));    //Θ(1)
                 }
-                if (greenArr[i] != 0)                   //o(1)
+                if (greenArr[i] != 0)                   //Θ(1)
                 {
-                    greenQ.Enqueue(new Node((byte)i, greenArr[i])); //o(1)
+                    greenQ.Enqueue(new Node((byte)i, greenArr[i])); //Θ(1)
                 }
-                if (blueArr[i] != 0)                    //o(1)
+                if (blueArr[i] != 0)                    //Θ(1)
                 {
-                    blueQ.Enqueue(new Node((byte)i, blueArr[i]));  //o(1)
+                    blueQ.Enqueue(new Node((byte)i, blueArr[i]));  //Θ(1)
                 }
             }
         }
