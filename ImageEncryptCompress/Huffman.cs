@@ -17,7 +17,7 @@ namespace ImageQuantization
             nodes = n;                      //ϴ(1)
             start = null;                   //ϴ(1)
             nodes2 = new PriorityQueue(n);  //ϴ(1)
-            constructTree();                //ϴ(1)
+            constructTree();                //ϴ(n log n)
 
         }
 

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -36,57 +36,57 @@ namespace ImageQuantization
 
         private void btnGaussSmooth_Click(object sender, EventArgs e)
         {
-            int tap = Int16.Parse(txtGaussSigma.Text);
-            string seed = textBox1.Text;
+            int tap = Int16.Parse(txtGaussSigma.Text);//ϴ(1)
+            string seed = textBox1.Text;   //ϴ(1)
             // start stopwatch
-            Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
+            Stopwatch stopWatch = new Stopwatch();     // ϴ(1)
+            stopWatch.Start();          // ϴ(1)
 
-            TimeSpan ts;
-            string elapsedTime;
+            TimeSpan ts;       // ϴ(1)
+            string elapsedTime;   // ϴ(1)
 
-            RGBPixel[,] image3 = new RGBPixel[ImageMatrix.GetLength(0), ImageMatrix.GetLength(1)];
-            Array.Copy(ImageMatrix, image3, ImageMatrix.GetLength(0) * ImageMatrix.GetLength(1));
-            ImageMatrix = ImageOperations.encrypt(ImageMatrix, tap, seed);
+            RGBPixel[,] image3 = new RGBPixel[ImageMatrix.GetLength(0), ImageMatrix.GetLength(1)]; // ϴ(1)
+            Array.Copy(ImageMatrix, image3, ImageMatrix.GetLength(0) * ImageMatrix.GetLength(1)); // ϴ(N^2) where n is the largest between width and height
+            ImageMatrix = ImageOperations.encrypt(ImageMatrix, tap, seed);// ϴ(N^2) where n is the largest between width and height
 
-            ImageOperations.DisplayImage(ImageMatrix, pictureBox2);
-             ts = stopWatch.Elapsed;
+            ImageOperations.DisplayImage(ImageMatrix, pictureBox2); // ϴ(N^2) where n is the largest between width and height
+            ts = stopWatch.Elapsed;    // ϴ(1)
             // Format and display the TimeSpan value.
-             elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+             elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",                                             
                 ts.Hours, ts.Minutes, ts.Seconds,
-                ts.Milliseconds / 10);
+                ts.Milliseconds / 10);   // ϴ(1)
+            label10.Text = elapsedTime;  // ϴ(1)
+            
+            PriorityQueue redQ = new PriorityQueue(); // ϴ(1)
+            PriorityQueue greenQ = new PriorityQueue(); // ϴ(1)
+            PriorityQueue blueQ = new PriorityQueue(); // ϴ(1)
+            ImageOperations.getFrequency(ImageMatrix, redQ, greenQ, blueQ);  // ϴ(N^2) where n is the largest between width and height
+            Huffman huffmanRed = new Huffman(redQ);   // ϴ(n log n) where n is the largest between width and height
+            Huffman huffmanGreen = new Huffman(greenQ);  // ϴ(n log n) where n is the largest between width and height
+            Huffman huffmanBlue = new Huffman(blueQ);  // ϴ(n log n) where n is the largest between width and height
+            double originalSize = ImageMatrix.GetLength(0) * ImageMatrix.GetLength(1) * 8 * 3; // ϴ(1)
+            double compressedSize = huffmanRed.getCompressedSize() + huffmanGreen.getCompressedSize() + huffmanBlue.getCompressedSize();// ϴ(1)
+            double compressionRatio = (compressedSize / originalSize) * 100;// ϴ(1)
+            compressRatio.Text = compressionRatio + "%";// ϴ(1)
+            Compression.compress(ImageMatrix, huffmanRed, huffmanGreen, huffmanBlue,seed,short.Parse(txtGaussSigma.Text));  // ϴ(N^2) where n is the largest between width and height
+            ts = stopWatch.Elapsed;// ϴ(1)
+            // Format and display the TimeSpan value.
+            elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",      
+               ts.Hours, ts.Minutes, ts.Seconds,
+               ts.Milliseconds / 10); // ϴ(1)
 
-            label10.Text = elapsedTime;
+            label12.Text = elapsedTime;  // ϴ(1)
 
-            PriorityQueue redQ = new PriorityQueue();
-            PriorityQueue greenQ = new PriorityQueue();
-            PriorityQueue blueQ = new PriorityQueue();
-            ImageOperations.getFrequency(ImageMatrix, redQ, greenQ, blueQ);
-            Huffman huffmanRed = new Huffman(redQ);
-            Huffman huffmanGreen = new Huffman(greenQ);
-            Huffman huffmanBlue = new Huffman(blueQ);
-            double originalSize = ImageMatrix.GetLength(0) * ImageMatrix.GetLength(1) * 8 * 3;
-            double compressedSize = huffmanRed.getCompressedSize() + huffmanGreen.getCompressedSize() + huffmanBlue.getCompressedSize();
-            double compressionRatio = (compressedSize / originalSize) * 100;
-            compressRatio.Text = compressionRatio + "%";
-            Compression.compress(ImageMatrix, huffmanRed, huffmanGreen, huffmanBlue,seed,short.Parse(txtGaussSigma.Text));
-            ts = stopWatch.Elapsed;
+            RGBPixel[,] ImageMatrix2 = Compression.decompress("compressEncode.bin");// ϴ(N^2) where n is the largest between width and height
+            ImageOperations.DisplayImage(ImageMatrix2, pictureBox3); // ϴ(N^2) where n is the largest between width and height
+            ts = stopWatch.Elapsed;       // ϴ(1)
             // Format and display the TimeSpan value.
             elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
                ts.Hours, ts.Minutes, ts.Seconds,
-               ts.Milliseconds / 10);
+               ts.Milliseconds / 10); // ϴ(1)
 
-            label12.Text = elapsedTime;
-            RGBPixel[,] ImageMatrix2 = Compression.decompress("compressEncode.bin");
-            ImageOperations.DisplayImage(ImageMatrix2, pictureBox3);
-            ts = stopWatch.Elapsed;
-            // Format and display the TimeSpan value.
-            elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
-               ts.Hours, ts.Minutes, ts.Seconds,
-               ts.Milliseconds / 10);
-
-            label11.Text = elapsedTime;
-            stopWatch.Stop();
+            label11.Text = elapsedTime; // ϴ(1)
+            stopWatch.Stop(); // ϴ(1)
 
 
         }
