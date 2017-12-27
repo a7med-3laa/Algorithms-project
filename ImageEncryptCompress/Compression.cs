@@ -80,11 +80,8 @@ namespace ImageQuantization
 
         public static RGBPixel[,] decompress(string path, RGBPixel[,] temp2)
         {
-            countB = 0;
-            countR = 0;
-            countG = 0;
             int fileoffset;
-            byte[] fileData = File.ReadAllBytes(path);
+            byte[] fileData = FileToByteArray(path);
             int RedTreesize = BitConverter.ToInt32(fileData, 0);
             Huffman huffmanRed = new Huffman(getPriorityQueue(Encoding.ASCII.GetString(fileData, 4, RedTreesize)));
 
@@ -116,6 +113,7 @@ namespace ImageQuantization
 
             int blueL = BitConverter.ToInt32(fileData, fileoffset);
             fileoffset += 4;
+
             redL -= greenL;
             redL -= blueL;
 
@@ -123,28 +121,19 @@ namespace ImageQuantization
             Array.Copy(fileData, fileoffset, binR, 0, fileData.Length - fileoffset);
 
             BitArray bR = new BitArray(binR);
-            Boolean[] binary = new Boolean[bR.Count];
-            bR.CopyTo(binary, 0);
+              countR = 0;
+              countG = redL;
+              countB = redL+greenL;
 
-
-            Boolean[] binaryR = new Boolean[redL];
-            Array.Copy(binary, 0, binaryR, 0, redL);
-
-            Boolean[] binaryG = new Boolean[greenL];
-
-            Array.Copy(binary, redL, binaryG, 0, greenL);
-            Boolean[] binaryB = new Boolean[blueL];
-
-            Array.Copy(binary, redL + greenL, binaryB, 0, blueL);
             RGBPixel[,] Image = new RGBPixel[width, height];
 
             for (int i = 0; i < width; i++)
             {
                 for (int j = 0; j < height; j++)
                 {
-                    Image[i, j].red = getColor(huffmanRed.start, binaryR, ref countR);
-                    Image[i, j].green = getColor(huffmanGreen.start, binaryG, ref countG);
-                    Image[i, j].blue = getColor(huffmanBlue.start, binaryB, ref countB);
+                    Image[i, j].red = getColor(huffmanRed.start, bR,  ref countR);
+                    Image[i, j].green = getColor(huffmanGreen.start, bR, ref countG);
+                    Image[i, j].blue = getColor(huffmanBlue.start, bR,  ref countB);
 
                 }
             }
@@ -153,12 +142,12 @@ namespace ImageQuantization
             return Image;
         }
 
-        private static byte getColor(Node start, Boolean[] s, ref int count)
+        private static byte getColor(Node start, BitArray s,ref int count)
         {
             Node n = start;
             while (n.hasChildreen())
             {
-                if (s[count] == false)
+                if (s.Get(count)== false)
                     n = n.left;
                 else
                     n = n.right;
@@ -180,6 +169,19 @@ namespace ImageQuantization
             }
             return tempDic;
 
+        }
+        public static byte[] FileToByteArray(string fileName)
+        {
+            byte[] fileData = null;
+
+            using (FileStream fs = new FileStream(fileName, FileMode.Open))
+            {
+                using (BinaryReader binaryReader = new BinaryReader(fs))
+                {
+                    fileData = binaryReader.ReadBytes((int)fs.Length);
+                }
+            }
+            return fileData;
         }
 
     }
