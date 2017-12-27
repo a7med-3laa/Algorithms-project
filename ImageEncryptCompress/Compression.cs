@@ -14,12 +14,11 @@ namespace ImageQuantization
         static string fileName = "compressEncode.bin";
         static int countR = 0;
         static int countG = 0;
-        static int countB = 0; static int countBoolean = 0;
-
+        static int countB = 0;
 
         public static void compress(RGBPixel[,] ImageMatrix, Huffman huffmanRed, Huffman huffmanGreen, Huffman huffmanBlue, string seed, short tap)
         {
-            List<bool> tempRed = new List<bool>(ImageMatrix.GetLength(0)* ImageMatrix.GetLength(1)*3);
+            List<bool> tempRed = new List<bool>(ImageMatrix.GetLength(0) * ImageMatrix.GetLength(1) * 3);
             List<bool> tempBlue = new List<bool>();
             List<bool> tempGreen = new List<bool>();
             BinaryWriter b = new BinaryWriter(File.Open(fileName, FileMode.Create));
@@ -52,8 +51,8 @@ namespace ImageQuantization
 
             int fileLength = (RedTree.Length) + greenTree.Length + blueTree.Length +
                 redTreeLength.Length + greenTreeLength.Length + blueTreeLength.Length +
-                width.Length + hight.Length + seed2.Length + tap1.Length + seed2Length.Length+redL.Length+greenL.Length
-                +blueL.Length;
+                width.Length + hight.Length + seed2.Length + tap1.Length + seed2Length.Length + redL.Length + greenL.Length
+                + blueL.Length;
 
             List<Byte> bytes2 = new List<Byte>(fileLength);
             bytes2.AddRange(redTreeLength);
@@ -95,20 +94,26 @@ namespace ImageQuantization
             int blueTreesize = BitConverter.ToInt32(fileData, 8 + greenTreesize + RedTreesize);
             Huffman huffmanBlue = new Huffman(getPriorityQueue(Encoding.ASCII.GetString(fileData, 12 + greenTreesize + RedTreesize, blueTreesize)));
             fileoffset = RedTreesize + blueTreesize + greenTreesize + 12;
+
             int width = BitConverter.ToInt32(fileData, fileoffset);
             fileoffset += 4;
             int height = BitConverter.ToInt32(fileData, fileoffset);
             fileoffset += 4;
             int seedLength = BitConverter.ToInt32(fileData, fileoffset);
             fileoffset += 4;
+
             string seed = Encoding.ASCII.GetString(fileData, fileoffset, seedLength);
             fileoffset += seedLength;
+
             int tap = (int)BitConverter.ToInt16(fileData, fileoffset);
             fileoffset += 2;
+
             int redL = BitConverter.ToInt32(fileData, fileoffset);
             fileoffset += 4;
+
             int greenL = BitConverter.ToInt32(fileData, fileoffset);
             fileoffset += 4;
+
             int blueL = BitConverter.ToInt32(fileData, fileoffset);
             fileoffset += 4;
             redL -= greenL;
@@ -118,19 +123,19 @@ namespace ImageQuantization
             Array.Copy(fileData, fileoffset, binR, 0, fileData.Length - fileoffset);
 
             BitArray bR = new BitArray(binR);
-            
+            Boolean[] binary = new Boolean[bR.Count];
+            bR.CopyTo(binary, 0);
+
 
             Boolean[] binaryR = new Boolean[redL];
-            feedBooleanArray(bR, 0, binaryR, redL);
+            Array.Copy(binary, 0, binaryR, 0, redL);
 
             Boolean[] binaryG = new Boolean[greenL];
-            countBoolean = 0;
-            feedBooleanArray(bR, redL, binaryG, greenL);
 
+            Array.Copy(binary, redL, binaryG, 0, greenL);
             Boolean[] binaryB = new Boolean[blueL];
-            countBoolean = 0;
-            feedBooleanArray(bR, redL + greenL, binaryB, blueL);
 
+            Array.Copy(binary, redL + greenL, binaryB, 0, blueL);
             RGBPixel[,] Image = new RGBPixel[width, height];
 
             for (int i = 0; i < width; i++)
@@ -174,17 +179,6 @@ namespace ImageQuantization
                 tempDic.Enqueue(new Node((byte)color, freq));
             }
             return tempDic;
-
-        }
-      
-        public static void feedBooleanArray(BitArray bt, int startIndex ,Boolean[] color,int length)
-        {   for (int i = startIndex; i < startIndex+length; i++)
-            {
-
-                color[countBoolean++] = bt.Get(i);
-             
-
-            }
 
         }
 
